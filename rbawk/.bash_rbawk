@@ -1,0 +1,4 @@
+# Edit this file then source this it in your .bashrc
+export RUBYLIB=$RUBYLIB:/path/to/folder/containing/rbawk.rb/file
+alias rbawk='ruby -r rbawk.rb -nale'
+
