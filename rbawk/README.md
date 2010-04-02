@@ -6,7 +6,7 @@ To configure:
  * Edit `.bash_rbawk` and tell `RUBYLIB` where it's located.
  * Voila!
 
-Usge:
+Usage:
 
  * See [here](http://jambla.co.uk/?p=21)
 
