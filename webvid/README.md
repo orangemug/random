@@ -8,3 +8,7 @@ Example:
 
     ./webvid.rb ~/video/input.ogv ~/video/block.png "test" "videos" "videos" "200x200"
 
+## LINKS
+
+ * <http://camendesign.com/code/video_for_everybody#video-encode>
+ * <http://sandbox.thewikies.com/vfe-generator>
