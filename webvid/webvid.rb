@@ -1,0 +1,65 @@
+#!/usr/bin/ruby -w
+require 'fileutils'
+require 'pathname'
+
+if ARGV.length != 6
+  puts <<END
+./webvid [input_video] [image] [title] [video_dir] [web_path] [dimensions]
+END
+  exit
+end
+
+video      = ARGV[0]
+image      = ARGV[1]
+title      = ARGV[2]
+video_dir  = ARGV[3]
+web_path   = ARGV[4]
+dimensions = ARGV[5]
+
+if dimensions !~ /^[0-9]+x[0-9]+$/
+  puts "ERROR: Incorrect dimension"
+  exit
+end
+
+width, height = dimensions.split('x')
+
+extras = "-s #{width}x#{height}"
+
+video_filename = Pathname.new(video).basename.to_s.sub(/\..*$/, '')
+
+Dir.mkdir(video_dir) if !File.directory? video_dir
+
+img_ext = File.extname(image)
+img_path = "#{video_filename}#{img_ext}"
+FileUtils.cp(image, "#{img_path}")
+
+
+filename = "#{video_dir}/#{video_filename}"
+`ffmpeg #{extras} -i #{video} #{filename}.webm`
+`ffmpeg #{extras} -i #{video} #{filename}.mp4`
+`ffmpeg #{extras} -i #{video} #{filename}.ogv`
+
+filename = "#{web_path}/#{video_filename}"
+src = <<END
+  <!-- "Video For Everybody" v0.4.2 by Kroc Camen of Camen Design -->
+  <video controls="controls" poster="#{img_path}" width="#{width}" height="#{height}">
+  	<source src="#{filename}.mp4" type="video/mp4" />
+  	<source src="#{filename}.webm" type="video/webm" />
+  	<source src="#{filename}.ogv" type="video/ogg" />
+  	<object type="application/x-shockwave-flash" data="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" width="#{width}" height="#{height}">
+  		<param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" />
+  		<param name="allowFullScreen" value="true" />
+  		<param name="wmode" value="transparent" />
+  		<param name="flashVars" value="config={'playlist':['#{img_path}',{'url':'#{filename}.mp4','autoPlay':false}]}" />
+  		<img alt="#{title}" src="#{img_path}" width="#{width}" height="#{height}" title="No video playback capabilities, please download the video below" />
+  	</object>
+  </video>
+  <p>
+  	<strong>Download video:</strong> <a href="#{filename}.mp4">MP4 format</a> | <a href="#{filename}.ogv">Ogg format</a> | <a href="#{filename}.webm">WebM format</a>
+  </p>
+END
+
+puts "=" * 80
+puts "Add the following to your page"
+puts "=" * 80
+puts src
