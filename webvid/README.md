@@ -6,7 +6,7 @@ Add the script to your path, and the usage is:
 
 Example:
 
-    ./webvid.rb ~/video/input.ogv ~/video/block.png "test" "videos" "videos" "200x200"
+    ./webvid ~/video/input.ogv ~/video/block.png "test" "videos" "videos" "200x200"
 
 ## LINKS
 

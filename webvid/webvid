@@ -30,7 +30,7 @@ video_filename = Pathname.new(video).basename.to_s.sub(/\..*$/, '')
 Dir.mkdir(video_dir) if !File.directory? video_dir
 
 img_ext = File.extname(image)
-img_path = "#{video_filename}#{img_ext}"
+img_path = "#{video_dir}/#{video_filename}#{img_ext}"
 FileUtils.cp(image, "#{img_path}")
 
 
